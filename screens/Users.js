@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react"
 import { ActivityIndicator, FlatList, StyleSheet, Text, View } from "react-native"
+import { useSelector } from "react-redux"
 import User from "../components/User"
-import Map from "./Map"
+import Map from "../components/Map"
 
-export default function Users({ route }, props) {
-    console.log(props.isListUser)
+export default function Users() {
+
     const [data, setData] = useState([])
     const [currentPage, setCurrentPage] = useState(1)
     const [isLoading, setIsLoading] = useState(false)
     const [endPages, setEndPages] = useState(false)
-    const [isUserComponent, setIsUserComponent] = useState(true)
+
+    const isUserComponent = useSelector((state) => state.userComponentReducer)
 
     function fetchData() {
         setIsLoading(true)
@@ -43,7 +45,7 @@ export default function Users({ route }, props) {
     function renderLoader() {
         return (
             isLoading ?
-                <View style={styles.loaderStyle}>
+                <View style={styles.loaderStyle} >
                     {endPages ?
                         <Text style={{ alignSelf: "center" }}>All Datas has been showed</Text> :
                         <ActivityIndicator size="large" color="#aaa" />
@@ -69,7 +71,7 @@ export default function Users({ route }, props) {
                 onEndReached={loadMore}
                 onEndReachedThreshold={0}
             /> :
-            <Map />
+            <Map data={data} />
 
     )
 }
